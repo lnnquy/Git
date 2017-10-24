@@ -1,0 +1,22 @@
+<div class="col-md-12" ng-if="isAdmin()">
+    <crud-table api='Rating' 
+                cols='[             
+                {"Customer":"wishlistCustomer"}, 
+                {"Product":"wishlistProduct"} ,
+                {"star":"text"} ,
+                {"comment":"text"} 
+                ]' 
+                noadd="true" noedit="true" nodelete="true"
+                ></crud-table>
+</div>
+<div class="col-md-12" ng-if="!isAdmin()">
+    <crud-table api='MyRating' 
+                cols='[             
+                {"Product":"wishlistProduct"} ,
+                {"star":"text"} ,
+                {"comment":"text"} 
+                ]' 
+                noadd="true" noedit="true" nodelete="true"
+                userid="{{user.id}}" 
+                ></crud-table>
+</div>

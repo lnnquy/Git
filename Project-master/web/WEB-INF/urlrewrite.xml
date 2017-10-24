@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+"http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<!--
+
+Configuration file for UrlRewriteFilter
+http://www.tuckey.org/urlrewrite/
+
+-->
+<urlrewrite>
+    <rule>
+        <from>^/signup$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/login$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/contact$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/account$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/product$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/category$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/customer$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/order$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/checkout$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/coupon$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/role$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/wishlist$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/rating$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/statistics$</from>
+      <to>index.html</to>
+      </rule>
+      <rule>
+        <from>^/settings$</from>
+        <to>index.html</to>
+    </rule>
+    <rule>
+        <from>^/product/(.*)$</from>
+        <to>../index.html</to>
+    </rule> 
+    <rule>
+        <from>^/profile$</from>
+        <to>index.html</to>
+    </rule>
+</urlrewrite>

@@ -1,0 +1,247 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <ol class="breadcrumb">
+                <li><a ui-sref="main">Home</a></li>
+                <li ng-repeat="b in breadcrumb.items| reverse">
+                    <a ui-sref="main({myCategory: b})">{{b.name}}</a>
+                </li>
+            </ol>
+        </div>
+        <hr class="clearfix"/>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- *** MENUS AND FILTERS ***
+  _________________________________________________________ -->
+            <div class="panel panel-default sidebar-menu">              
+                <div class="panel-heading">
+                    <h3 class="panel-title">Categories
+                        <!--                        <div class="nav-search" id="nav-search">
+                                                    <span class="input-icon">
+                                                        <input placeholder="Filter Categories ..." class="nav-search-input" ng-model="filterCat" autocomplete="off" type="text" autofocus style="width:100%">
+                                                        <i class="search-icon fa fa-search nav-search-icon"></i>
+                                                    </span>
+                                                </div>-->
+                    </h3>
+                </div>
+
+                <div class="panel-body brand-filter-panel hidescroll">
+                    <form>
+                        <div class="form-group">
+                            <div class="checkbox" ng-repeat="cat in categories| filter:filterCat" style="position: relative">
+                                <label class="category" ng-click="goMain(cat);">
+                                    <i class="search-icon fa fa-ticket nav-search-icon"></i>
+                                    {{cat.name}}<span>&nbsp;</span>
+                                    <span class="badge mybadge">{{cat.count}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- *** MENUS AND FILTERS END *** -->
+
+            <div class="banner">
+                <a href="#">
+                    <img src="assets/images/banner.jpg" alt="sales 2017" class="img-responsive">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row" id="productMain">
+                <div class="col-sm-6">
+                    <div id="mainImage">
+                        <img ng-src="assets/books/{{product.image}}" err-src="{{product.image}}" alt="{{product.name}}" class="img-responsive">
+                    </div>
+
+                    <div class="ribbon sale">
+                        <div class="theribbon">SALE</div>
+                        <div class="ribbon-background"></div>
+                    </div>
+                    <!-- /.ribbon -->
+
+                    <div class="ribbon new">
+                        <div class="theribbon">NEW</div>
+                        <div class="ribbon-background"></div>
+                    </div>
+                    <!-- /.ribbon -->
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="box text-center" id="details">
+                        <h3 class="text-center" style="margin-bottom: 6px">{{product.name}}</h3>
+                        <p class="price"><del class="text-muted" ng-if="product.price != product.mrp">{{product.mrp}}</del>&nbsp;${{product.price}}</p>
+                        <h5>
+                            <a ng-if="product.quantity > 5">{{product.quantity}} in stock</a>
+                            <a ng-if="product.quantity <= 5 && product.quantity >= 1">Only {{product.quantity}} left</a>
+                        </h5>
+                        <h5 ng-if="product.quantity == 0" class="help-block">Out of stock</h5>
+                        <div class="text-center buttons">                            
+                            <div class="btn-group" ng-hide="checkCart(product.id)">
+                                <button class="btn btn-info btn-sd"
+                                        ng-click="cart.addItem(product.id, product.name, product.quantity, product.mrp, product.price, -1)">&nbsp;-</button>
+                                <button class="btn btn-info btn-sd">{{getQuantity(product.id);}}</button>
+                                <button class="btn btn-info btn-sd"
+                                        ng-click="cart.addItem(product.id, product.name, product.quantity, product.mrp, product.price, +1)" 
+                                        ng-disabled="getQuantity(product.id) >= product.quantity">+</button>
+                            </div>
+                            <div class="btn-group" ng-show="checkCart(product.id)">
+                                <button  class="btn btn-primary btn-mycart"
+                                         ng-click="cart.addItem(product.id, product.name, product.quantity, product.mrp, product.price, 1, product.image, product.categoryId, product);" 
+                                         ng-disabled="product.quantity == 0"><i class="fa fa-shopping-cart"></i>Add to cart</button>
+                            </div>
+
+                            <div class="btn-group" ng-if="isLoggedIn() && !isWished">
+                                <button  class="btn btn-default btn-wishlist"                                     
+                                         ng-click="addWishlist()"><i class="fa fa-heart"></i>Add to wishlist</button>
+                            </div>
+                            <div class="btn-group" ng-if="isLoggedIn() && isWished">
+                                <button  class="btn-wished btn btn-default"
+                                         ng-click="removeWishlist()"><i class="fa fa-heart"></i>Wished</button>
+                            </div>                                                        
+                        </div>
+                        <hr>
+                        <button  class="btn btn-primary btn-mycart"
+                                 ng-if="isLoggedIn() && !rates.length"
+                                 data-toggle="modal" data-target="#myModal"><i class="fa fa-star"></i>Be the first one review this item</button>
+
+                        <div class="row" style="margin-bottom: -10px"
+                             ng-if="isLoggedIn() && rates.length">
+                            <div class="ratehead checkbox">
+                                {{avgRate| number:1}} <i class="fa fa-star"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <label style="font-size: 16px" data-toggle="modal" data-target="#rateModal">{{rates.length}} Ratings & Reviews</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="" ng-repeat="star in starsArray| reverse" style="position: relative;">
+                                    <span class="ratingstar" ng-class="{'lowrate': star.type == 'danger'}">{{starsArray.length - $index}} <i class="fa fa-star"></i></span>
+                                    <span class="">
+                                        <progressbar ng-class="{'lowratebg': star.type == 'danger'}" animate="false" value="star.percent" type="{{star.type}}"></progressbar>
+                                    </span>
+                                    <span class="ratingnum" ng-class="{'lowrate': star.type == 'danger'}">{{star.count}}</span>
+                                </div> 
+                            </div>
+                            <div class="col-md-4"><br><br>
+                                <button  class="btn btn-primary btn-mycart" type="button"                                    
+                                         data-toggle="modal" data-target="#myModal">Rate & Review</button>
+                            </div>                    
+                        </div>
+                        <hr>
+                        <div class="social">
+                            <h4>Show it to your friends</h4>
+                            <p>
+                                <a href="" class="external facebook" data-animate-hover="pulse"><i class="fa fa-facebook"></i></a>
+                                <a href="" class="external gplus" data-animate-hover="pulse"><i class="fa fa-google-plus"></i></a>
+                                <a href="" class="external twitter" data-animate-hover="pulse"><i class="fa fa-twitter"></i></a>
+                                <a href="" class="email" data-animate-hover="pulse"><i class="fa fa-envelope"></i></a>
+                            </p>
+                        </div>
+
+                    </div>                        
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+            <div class="box">
+                <p></p>
+                <h4>Category</h4>
+                <ul>
+                    <li><a href="">{{product.categoryId.name}}</a></li>
+                </ul>
+                <h4>Author</h4>
+                <ul>
+                    <li><a href="">{{product.author}}</a></li>
+                </ul>
+
+                <blockquote>
+                    <p>{{product.description}}
+                    </p>
+                </blockquote>               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--review modal-->
+<div class="modal fade messagemodal" id="myModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog rating">
+        <div class="md-dialog md-transition-in">
+            <div class="layout-row">
+                <div class="modal-content layout-column flex">
+                    <section class="layout-align-center-center section layout-column flex">
+                        <h3>Rating &amp; Review</h3>
+                        <form name="form">
+                            <section class="section layout-column">                        
+                                <div>
+                                    <div class="layout-row star-container">  
+                                        <span class="button mystar" 
+                                              ng-class="item.class" 
+                                              ng-mouseover="setMouseOverRating($index + 1)" 
+                                              ng-mouseleave="setMouseOverRating(cusRating.star)" 
+                                              ng-click="setRating($index + 1)" 
+                                              ng-repeat="item in starsArray">
+                                            <i class="fa fa-star" style="font-size: 1.5em"></i>
+                                        </span>
+                                    </div>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <div>
+                                        <textarea type="text" name="comment" class="input-message" ng-model="cusRating.comment"
+                                                  required placeholder="comment"></textarea>
+                                    </div>
+                                </div>
+                            </section>
+                            <span class="help-block" ng-show="form.$dirty && !cusRating.star && form.comment.$error.required">
+                                Please rate the item from a scale of 1-5 or leave a comment<br/>
+                            </span>
+                            <div class="text-center" style="margin-bottom: 10px;">
+                                <button  class="btn btn-primary btn-mycart"
+                                         ng-click="saveRating()" 
+                                         ng-disabled="form.$dirty && !cusRating.star && form.comment.$error.required"><i class="fa fa-save"></i>&nbsp;Save</button>
+                                <button  class="btn btn-default btn-wishlist"
+                                         data-dismiss="modal"
+                                         >Cancel</button>
+                            </div>               
+                        </form>
+                    </section>
+                </div>     
+            </div>
+        </div>        
+    </div>
+</div>
+
+<div class="modal fade messagemodal" id="rateModal" role="dialog" tabindex="-1">     
+    <div class="modal-dialog rating"> 
+        <div class="md-dialog md-transition-in">
+            <div class="layout-row">
+                <div class="modal-content layout-column flex hidescroll">
+                    <h4 class="text-center">Customer's Rating & Review</h4>
+                    <div class="wishlistpanel" ng-repeat="rate in rates| orderBy: 'star': reverse">
+                        <div class="panel-body" style="">
+                            <a>
+                                <i class="fa fa-user"></i>&nbsp;{{rate.customerId.name}}&nbsp;</br>
+                            </a>
+                            <div style="overflow: auto">
+                                <span class="rating-good text-center" ng-class="{'rating-bad': rate.star == '1'||rate.star == '2'}">&nbsp;&nbsp;{{rate.star}} <i class="fa fa-star"></i></span>
+                                &nbsp;{{rate.comment}}
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
